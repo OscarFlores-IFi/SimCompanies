@@ -11,6 +11,8 @@ class Resources(object):
     seeds = 0 
     grain = 0
     sausages = 0
+    
+    buildings = 0 # Let's add the value of each building and the total of them.
 
     @staticmethod
     def info():
@@ -32,6 +34,7 @@ class Resources(object):
         
     @staticmethod
     def revenue():
+        # Total hourly revenue (considering a monetary price for excess in production)
         water_price = 0.295
         seeds_price = 0.18
         grain_price = 0.49
@@ -45,10 +48,13 @@ class Resources(object):
 
     @staticmethod
     def revenue_daily():
+        # same as previous one, but daily
         return (Resources.revenue() * 24)
         
         
 class Plantation(object):
+    # The plantation produces seeds, grain, apples, ... 
+    # For our business model we buy the seeds and produce grain from it. 
     def __init__(self, lvl):
         self.lvl = lvl
         self.grain_production = 825 * lvl
@@ -72,6 +78,7 @@ class Plantation(object):
 
 
 class Farm(object):
+    # Once we have enough grain (if we do not, we buy it) we produce Sausages
     def __init__(self, lvl):
         self.lvl = lvl
         self.sausage_production = 138.4 * lvl
@@ -95,6 +102,7 @@ class Farm(object):
         
 
 class Grocery(object):
+    # And at last we sell the sausages. 
     def __init__(self, lvl, retail_price, units_sold_per_hour):
         self.sausage_retail_price = retail_price 
         self.lvl = lvl
