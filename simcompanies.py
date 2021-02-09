@@ -4,6 +4,9 @@ Spyder Editor
 
 This is a temporary script file.
 """
+
+import numpy as np
+
 class Resources(object):
     
     cash = 0 
@@ -11,8 +14,7 @@ class Resources(object):
     seeds = 0 
     grain = 0
     sausages = 0
-    
-    buildings = 0 # Let's add the value of each building and the total of them.
+    buildings = 0 
 
     @staticmethod
     def info():
@@ -22,6 +24,7 @@ class Resources(object):
         print('Seeds: {}'.format(Resources.seeds)) 
         print('Grain: {}'.format(Resources.grain))
         print('Sausages: {}'.format(Resources.sausages))
+        print('Buildings value: {}'.format(Resources.buildings))
     
     @staticmethod
     def info_daily():
@@ -31,6 +34,7 @@ class Resources(object):
         print('Seeds: {}'.format(Resources.seeds * 24)) 
         print('Grain: {}'.format(Resources.grain * 24))
         print('Sausages: {}'.format(Resources.sausages * 24))
+        print('Buildings value: {}'.format(Resources.buildings))
         
     @staticmethod
     def revenue():
@@ -52,6 +56,7 @@ class Resources(object):
         return (Resources.revenue() * 24)
         
         
+        
 class Plantation(object):
     # The plantation produces seeds, grain, apples, ... 
     # For our business model we buy the seeds and produce grain from it. 
@@ -60,12 +65,17 @@ class Plantation(object):
         self.grain_production = 825 * lvl
         self.grain_input_resources = [0.5, 1] # [water, seeds]
         self.wages = 104 * admin_overhead * lvl
-        self.upgrading_cost = 6900 * lvl 
-        
+        self.cost_per_level = 6900
+        self.upgrading_cost = self.cost_per_level * lvl
+        self.building_value = (np.arange(lvl) * self.cost_per_level).sum()+ \
+            self.cost_per_level     
+            
         Resources.cash -= self.wages
         Resources.water -= self.grain_input_resources[0] * self.grain_production
         Resources.seeds -= self.grain_input_resources[1] * self.grain_production
         Resources.grain += self.grain_production
+        Resources.buildings += self.building_value
+        
     
     def info(self):
         print('Plantation lvl: ' + str(self.lvl))
@@ -74,7 +84,8 @@ class Plantation(object):
             self.grain_input_resources[0] * self.grain_production,
             self.grain_input_resources[1] * self.grain_production))
         print('Wages: ' + str(self.wages))
-        print('Upgrading Cost: ' + str(self.upgrading_cost))        
+        print('Upgrading Cost: ' + str(self.upgrading_cost))   
+        print('Building value: '+ str(self.building_value))
 
 
 class Farm(object):
@@ -84,12 +95,17 @@ class Farm(object):
         self.sausage_production = 138.4 * lvl
         self.sausage_input_resources = [3, 2] # [water, grain]
         self.wages = 138  * admin_overhead * lvl
-        self.upgrading_cost = 10350 * lvl 
+        self.cost_per_level = 10350
+        self.upgrading_cost = self.cost_per_level * lvl
+        self.building_value = (np.arange(lvl) * self.cost_per_level).sum()+ \
+            self.cost_per_level        
         
         Resources.cash -= self.wages
         Resources.water -= self.sausage_input_resources[0] * self.sausage_production
         Resources.grain -= self.sausage_input_resources[1] * self.sausage_production
         Resources.sausages += self.sausage_production
+        Resources.buildings += self.building_value
+        
 
     def info(self):
         print('Farm lvl: ' + str(self.lvl))
@@ -99,6 +115,7 @@ class Farm(object):
             self.sausage_input_resources[1] * self.sausage_production))        
         print('Wages: ' + str(self.wages))
         print('Upgrading Cost: ' + str(self.upgrading_cost))
+        print('Building value: '+ str(self.building_value))
         
 
 class Grocery(object):
@@ -108,10 +125,14 @@ class Grocery(object):
         self.lvl = lvl
         self.sales = units_sold_per_hour * lvl
         self.wages = 138 * admin_overhead * lvl
-        self.upgrading_cost = 10350 * lvl 
+        self.cost_per_level = 10350
+        self.upgrading_cost = self.cost_per_level * lvl
+        self.building_value = (np.arange(lvl) * self.cost_per_level).sum()+ \
+            self.cost_per_level
 
         Resources.cash += self.sales * self.sausage_retail_price - self.wages
         Resources.sausages -= self.sales
+        Resources.buildings += self.building_value
         
         
     def info(self):
@@ -120,7 +141,8 @@ class Grocery(object):
         print('Wages: ' + str(self.wages))
         print('Sales - wages, per hour: ' + str(self.sales * self.sausage_retail_price - self.wages))
         print('Upgrading Cost: ' + str(self.upgrading_cost))
-
+        print('Building value: '+ str(self.building_value))
+        
 
 ##### 
 ##### Simulations!
@@ -132,13 +154,13 @@ P1 = Plantation(3)
 # P1.info()
 
 F1 = Farm(5)
-F2 = Farm(3)
+F2 = Farm(4)
 # F1.info()
 
 rp, usph = 6.1, 80 
 
-G1 = Grocery(3, rp, usph) # lvl, retail price, units sold per hour (at lvl 1)
-G2 = Grocery(3, rp, usph)
+G1 = Grocery(4, rp, usph) # lvl, retail price, units sold per hour (at lvl 1)
+G2 = Grocery(4, rp, usph)
 G3 = Grocery(3 ,rp, usph)
 G4 = Grocery(3, rp, usph)
 # G1.info()
