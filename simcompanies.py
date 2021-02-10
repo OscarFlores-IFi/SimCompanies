@@ -147,23 +147,56 @@ class Grocery(object):
 ##### 
 ##### Simulations!
 #####
-
-admin_overhead = 1.13
         
-P1 = Plantation(3)
+admin_overhead = 1.17
+        
+P1 = Plantation(4)
 # P1.info()
 
-F1 = Farm(5)
+F1 = Farm(3)
 F2 = Farm(4)
+F3 = Farm(5)
+F4 = Farm(3)
 # F1.info()
 
-rp, usph = 6.1, 80 
+rp, usph = 5.2, 136
+# rp, usph = 6.1, 80 # 
 
-G1 = Grocery(4, rp, usph) # lvl, retail price, units sold per hour (at lvl 1)
-G2 = Grocery(4, rp, usph)
+
+G1 = Grocery(3, rp, usph) # lvl, retail price, units sold per hour (at lvl 1)
+G2 = Grocery(3, rp, usph)
 G3 = Grocery(3 ,rp, usph)
 G4 = Grocery(3, rp, usph)
+G5 = Grocery(3, rp, usph)
+# G6 = Grocery(5, rp, usph)
 # G1.info()
+
+##### 
+##### Second simulation!
+#####
+        
+
+
+# admin_overhead = 1.17
+        
+# P1 = Plantation(5)
+# # P1.info()
+
+# F1 = Farm(7)
+# F2 = Farm(7)
+# F3 = Farm(7)
+# # F4 = Farm(5)
+# # F1.info()
+
+# rp, usph = 6.1, 80 
+
+# G1 = Grocery(6, rp, usph) # lvl, retail price, units sold per hour (at lvl 1)
+# G2 = Grocery(6, rp, usph)
+# G3 = Grocery(6 ,rp, usph)
+# G4 = Grocery(6, rp, usph)
+# G5 = Grocery(6, rp, usph)
+# G6 = Grocery(5, rp, usph)
+# # G1.info()
 
 
 Resources.info_daily()
