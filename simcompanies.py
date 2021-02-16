@@ -16,6 +16,16 @@ class Resources(object):
     sausages = 0
     buildings = 0 
 
+    water_price = 0.295 
+    seeds_price = 0.18 
+    grain_price = 0.55 if grain < 0 else 0.47
+    # sausages_price = 3.8 if sausages < 0 else (3.8 - 0.035)*0.97
+    # sausage production price = 3.03. Not considered in sausages price. 
+    # if production below retail we shoud buy at market price. if production is bigger than retail we sell, but pay transport and fees.
+  
+    sausages_price = 0 # if we only consider our income from retail. 
+    
+    
     @staticmethod
     def info():
         # resources hourly balance
@@ -36,26 +46,23 @@ class Resources(object):
         print('Sausages: {}'.format(Resources.sausages * 24))
         print('Buildings value: {}'.format(Resources.buildings))
         
-    @staticmethod
-    def revenue():
+    @classmethod
+    def daily_revenue(cls):
         # Total hourly revenue (considering a monetary price for excess in production)
-        water_price = 0.295
-        seeds_price = 0.18
-        grain_price = 0.49
-        sausages_price = 3.7
-        rev =   Resources.cash + \
-            water_price*Resources.water + \
-            seeds_price*Resources.seeds + \
-            grain_price*Resources.grain + \
-            sausages_price*Resources.sausages
-        return(rev)
+        rev =   cls.cash + \
+            cls.water_price*cls.water + \
+            cls.seeds_price*cls.seeds + \
+            cls.grain_price*cls.grain + \
+            cls.sausages_price*cls.sausages
+        
+        print('Total revenue: ' + str(rev*24 ))
+        return(rev*24)
+    
+    @classmethod
+    def daily_Revenue_per_Building_value(cls):
+        print('Daily yield revenue: ' + str(cls.daily_revenue()/cls.buildings))
 
-    @staticmethod
-    def revenue_daily():
-        # same as previous one, but daily
-        return (Resources.revenue() * 24)
-        
-        
+
         
 class Plantation(object):
     # The plantation produces seeds, grain, apples, ... 
@@ -142,36 +149,52 @@ class Grocery(object):
         print('Sales - wages, per hour: ' + str(self.sales * self.sausage_retail_price - self.wages))
         print('Upgrading Cost: ' + str(self.upgrading_cost))
         print('Building value: '+ str(self.building_value))
-        
+     
+def print_required_resources():
+    print('Daily cash required: ' + str(Resources.cash * 24 +\
+    Resources.seeds * Resources.seeds_price * 24 + \
+    Resources.water * Resources.water_price * 24))
+    
 
 ##### 
 ##### Simulations!
 #####
+
+# COO = 0.0045
+COO = 0.00
+
+admin_overhead = 1.2235 - COO
         
-admin_overhead = 1.17
-        
-P1 = Plantation(4)
+P1 = Plantation(6)
 # P1.info()
 
-F1 = Farm(3)
-F2 = Farm(4)
-F3 = Farm(5)
+F1 = Farm(5)
+F2 = Farm(5)
+F3 = Farm(4)
 F4 = Farm(3)
 # F1.info()
+
+### Paso intermedio
+print_required_resources()
+###
 
 rp, usph = 5.2, 136
 # rp, usph = 6.1, 80 # 
 
-
-G1 = Grocery(3, rp, usph) # lvl, retail price, units sold per hour (at lvl 1)
+G1 = Grocery(4, rp, usph) # lvl, retail price, units sold per hour (at lvl 1)
 G2 = Grocery(3, rp, usph)
-G3 = Grocery(3 ,rp, usph)
+G3 = Grocery(3, rp, usph)
 G4 = Grocery(3, rp, usph)
 G5 = Grocery(3, rp, usph)
 # G6 = Grocery(5, rp, usph)
 # G1.info()
 
-##### 
+
+
+Resources.info_daily()
+Resources.daily_Revenue_per_Building_value()
+
+#####
 ##### Second simulation!
 #####
         
@@ -198,7 +221,3 @@ G5 = Grocery(3, rp, usph)
 # G6 = Grocery(5, rp, usph)
 # # G1.info()
 
-
-Resources.info_daily()
-
-print('Total revenue: ' + str(Resources.revenue_daily()))
