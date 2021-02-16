@@ -18,12 +18,15 @@ class Resources(object):
 
     water_price = 0.295 
     seeds_price = 0.18 
-    grain_price = 0.55 if grain < 0 else 0.47
-    # sausages_price = 3.8 if sausages < 0 else (3.8 - 0.035)*0.97
-    # sausage production price = 3.03. Not considered in sausages price. 
-    # if production below retail we shoud buy at market price. if production is bigger than retail we sell, but pay transport and fees.
-  
-    sausages_price = 0 # if we only consider our income from retail. 
+    
+    # Considering excess/deficit production as a market price (for buy or sell)
+    # grain_price = 0.53 if grain < 0 else (0.53 - 0.1*0.358)*0.97
+    # sausages_price = 3.8 if sausages < 0 else (3.8 - 0.1*0.358)*0.97
+
+    # Considering excess production as priceless, but deficit as market price: 
+    grain_price = 0.53 if grain < 0 else 0
+    sausages_price = 3.8 if sausages < 0 else 0
+    
     
     
     @staticmethod
