@@ -2,7 +2,7 @@
 """
 Spyder Editor
 
-This is a temporary script file.
+This is a file for sausage produce and retail simulation.
 """
 
 import numpy as np
@@ -17,15 +17,15 @@ class Resources(object):
     buildings = 0 
 
     water_price = 0.295 
-    seeds_price = 0.18 
+    seeds_price = 0.19
     
     # Considering excess/deficit production as a market price (for buy or sell)
-    # grain_price = 0.53 if grain < 0 else (0.53 - 0.1*0.358)*0.97
-    # sausages_price = 3.8 if sausages < 0 else (3.8 - 0.1*0.358)*0.97
+    grain_price = 0.55 if grain < 0 else (0.55 - 0.1*0.358)*0.97
+    sausages_price = 3.8 if sausages < 0 else (3.8 - 0.1*0.358)*0.97
 
     # Considering excess production as priceless, but deficit as market price: 
-    grain_price = 0.53 if grain < 0 else 0
-    sausages_price = 3.8 if sausages < 0 else 0
+    # grain_price = 0.53 if grain < 0 else 0
+    # sausages_price = 3.8 if sausages < 0 else 0
     
     
     
@@ -163,29 +163,31 @@ def print_required_resources():
 ##### Simulations!
 #####
 
-# COO = 0.0045
-COO = 0.00
+# COO = 0.025 aprox. So it compensates with the admin overhead. the most, the better. 
+COO = 0.01
+# CMO = 0.03
+CMO = 0.01
 
-admin_overhead = 1.2235 - COO
+admin_overhead = 1.295 - COO
         
-P1 = Plantation(6)
+P1 = Plantation(10)
 # P1.info()
 
 F1 = Farm(5)
 F2 = Farm(5)
-F3 = Farm(4)
-F4 = Farm(3)
+F3 = Farm(5)
+F4 = Farm(5)
 # F1.info()
 
 ### Paso intermedio
 print_required_resources()
 ###
 
-rp, usph = 5.2, 136
+rp, usph = 5.2, 130*(1+CMO)
 # rp, usph = 6.1, 80 # 
 
 G1 = Grocery(4, rp, usph) # lvl, retail price, units sold per hour (at lvl 1)
-G2 = Grocery(3, rp, usph)
+G2 = Grocery(4, rp, usph)
 G3 = Grocery(3, rp, usph)
 G4 = Grocery(3, rp, usph)
 G5 = Grocery(3, rp, usph)
