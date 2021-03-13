@@ -9,29 +9,21 @@ import numpy as np
 
 class Resources(object):
     
-    
-
-
-
-    bfr
-    
-    rocket_engine
-    
-    cockpit
-    attitude_control
-    
-    fuselage
-    propellant_tank
-    heat_shield
-    orbital_booster
-    starship
-
-  
     cash = 0 
-    water = 0
-    seeds = 0 
-    grain = 0
-    eggs = 0
+
+    bfr = 0
+    
+    rocket_engine = 0 
+    
+    cockpit = 0
+    attitude_control = 0
+    
+    fuselage = 0
+    propellant_tank = 0
+    heat_shield = 0
+    orbital_booster = 0
+    starship = 0 
+
     buildings = 0 
 
     water_price = 0.295 
@@ -40,14 +32,7 @@ class Resources(object):
     # Considering excess/deficit production as a market price (for buy or sell)
     grain_price = 0.55 if grain < 0 else (0.55 - 0.1*0.358)*0.97
     eggs_price = 1.1 if eggs < 0 else (1.1 - 0.1*0.358)*0.97
-    
-    
-    # Considering excess production as priceless, but deficit as market price: 
-    # grain_price = 0.53 if grain < 0 else 0
-    # eggs_price = 1.1 if eggs < 0 else 0
-    
-    
-    
+
     @staticmethod
     def info():
         # resources hourly balance
