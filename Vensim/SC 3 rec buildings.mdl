@@ -1,4 +1,10 @@
 {UTF-8}
+cumprofit= INTEG (
+	Profit,
+		0)
+	~	
+	~		|
+
 Recreative bonus= INTEG (
 	new bonus-lost bonus,
 		0)
@@ -272,6 +278,8 @@ $-1--1--1,0,|12||-1--1--1|-1--1--1|-1--1--1|-1--1--1|-1--1--1|96,96,90,0
 10,91,lost bonus,582,276,75,30,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
 1,92,76,86,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
 1,93,86,91,1,0,0,0,0,192,0,-1--1--1,,1|(475,305)|
+10,94,cumprofit,1470,632,41,20,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,95,54,94,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
 \\\---/// Sketch information - do not modify anything except names
 V300  Do not put anything below this section - it will be ignored
 *View 2
@@ -349,7 +357,7 @@ Price_for_new_building
 :L<%^E!@
 1:current.vdfx
 4:Time
-5:Profit
+5:cumprofit
 9:current
 19:90,0
 24:0
