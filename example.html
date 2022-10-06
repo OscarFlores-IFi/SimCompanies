@@ -1,0 +1,204 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 500px;
+            height: 500px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+        #loadingBar {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width: 500px;
+            height: 500px;
+            background-color:rgba(200,200,200,0.8);
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+            opacity:1;
+        }
+
+        #bar {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width:20px;
+            height:20px;
+            margin:auto auto auto auto;
+            border-radius:11px;
+            border:2px solid rgba(30,30,30,0.05);
+            background: rgb(0, 173, 246); /* Old browsers */
+            box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+        }
+
+        #border {
+            position:absolute;
+            top:10px;
+            left:10px;
+            width:500px;
+            height:23px;
+            margin:auto auto auto auto;
+            box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+            border-radius:10px;
+        }
+
+        #text {
+            position:absolute;
+            top:8px;
+            left:530px;
+            width:30px;
+            height:50px;
+            margin:auto auto auto auto;
+            font-size:22px;
+            color: #000000;
+        }
+
+        div.outerBorder {
+            position:relative;
+            top:400px;
+            width:600px;
+            height:44px;
+            margin:auto auto auto auto;
+            border:8px solid rgba(0,0,0,0.1);
+            background: rgb(252,252,252); /* Old browsers */
+            background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+            background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+            border-radius:72px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+        }
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+<div id="loadingBar">
+    <div class="outerBorder">
+        <div id="text">0%</div>
+        <div id="border">
+            <div id="bar"></div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"id": "Water", "label": "Water", "shape": "dot", "size": 10}, {"id": "Power", "label": "Power", "shape": "dot", "size": 10}, {"id": "Seeds", "label": "Seeds", "shape": "dot", "size": 10}, {"id": "Apples", "label": "Apples", "shape": "dot", "size": 10}, {"id": "Oranges", "label": "Oranges", "shape": "dot", "size": 10}, {"id": "Grapes", "label": "Grapes", "shape": "dot", "size": 10}, {"id": "Grain", "label": "Grain", "shape": "dot", "size": 10}, {"id": "Sugarcane", "label": "Sugarcane", "shape": "dot", "size": 10}, {"id": "Eggs", "label": "Eggs", "shape": "dot", "size": 10}, {"id": "Minerals", "label": "Minerals", "shape": "dot", "size": 10}, {"id": "Bauxite", "label": "Bauxite", "shape": "dot", "size": 10}, {"id": "Gold ore", "label": "Gold ore", "shape": "dot", "size": 10}, {"id": "Cotton", "label": "Cotton", "shape": "dot", "size": 10}, {"id": "Iron ore", "label": "Iron ore", "shape": "dot", "size": 10}, {"id": "Reinforced concrete", "label": "Reinforced concrete", "shape": "dot", "size": 10}, {"id": "Wood", "label": "Wood", "shape": "dot", "size": 10}, {"id": "Cows", "label": "Cows", "shape": "dot", "size": 10}, {"id": "Pigs", "label": "Pigs", "shape": "dot", "size": 10}, {"id": "Coffee beans", "label": "Coffee beans", "shape": "dot", "size": 10}, {"id": "Cocoa", "label": "Cocoa", "shape": "dot", "size": 10}, {"id": "Vegetables", "label": "Vegetables", "shape": "dot", "size": 10}, {"id": "Milk", "label": "Milk", "shape": "dot", "size": 10}, {"id": "Ginger beer", "label": "Ginger beer", "shape": "dot", "size": 10}, {"id": "Sauce", "label": "Sauce", "shape": "dot", "size": 10}, {"id": "Apple pie", "label": "Apple pie", "shape": "dot", "size": 10}, {"id": "Apple cider", "label": "Apple cider", "shape": "dot", "size": 10}, {"id": "Orange juice", "label": "Orange juice", "shape": "dot", "size": 10}, {"id": "Flour", "label": "Flour", "shape": "dot", "size": 10}, {"id": "Fodder", "label": "Fodder", "shape": "dot", "size": 10}, {"id": "Steak", "label": "Steak", "shape": "dot", "size": 10}, {"id": "Hamburger", "label": "Hamburger", "shape": "dot", "size": 10}, {"id": "Lasagna", "label": "Lasagna", "shape": "dot", "size": 10}, {"id": "Sausages", "label": "Sausages", "shape": "dot", "size": 10}, {"id": "Frozen pizza", "label": "Frozen pizza", "shape": "dot", "size": 10}, {"id": "Meat balls", "label": "Meat balls", "shape": "dot", "size": 10}, {"id": "Dough", "label": "Dough", "shape": "dot", "size": 10}, {"id": "Pasta", "label": "Pasta", "shape": "dot", "size": 10}, {"id": "Crude oil", "label": "Crude oil", "shape": "dot", "size": 10}, {"id": "Petrol", "label": "Petrol", "shape": "dot", "size": 10}, {"id": "Diesel", "label": "Diesel", "shape": "dot", "size": 10}, {"id": "Plastic", "label": "Plastic", "shape": "dot", "size": 10}, {"id": "Carbon fibers", "label": "Carbon fibers", "shape": "dot", "size": 10}, {"id": "Transport", "label": "Transport", "shape": "dot", "size": 10}, {"id": "Construction units", "label": "Construction units", "shape": "dot", "size": 10}, {"id": "Ethanol", "label": "Ethanol", "shape": "dot", "size": 10}, {"id": "Chemicals", "label": "Chemicals", "shape": "dot", "size": 10}, {"id": "Aluminium", "label": "Aluminium", "shape": "dot", "size": 10}, {"id": "Silicon", "label": "Silicon", "shape": "dot", "size": 10}, {"id": "Processors", "label": "Processors", "shape": "dot", "size": 10}, {"id": "Electronic components", "label": "Electronic components", "shape": "dot", "size": 10}, {"id": "Displays", "label": "Displays", "shape": "dot", "size": 10}, {"id": "Glass", "label": "Glass", "shape": "dot", "size": 10}, {"id": "High grade e-comps", "label": "High grade e-comps", "shape": "dot", "size": 10}, {"id": "Heat shield", "label": "Heat shield", "shape": "dot", "size": 10}, {"id": "Sand", "label": "Sand", "shape": "dot", "size": 10}, {"id": "Batteries", "label": "Batteries", "shape": "dot", "size": 10}, {"id": "Steel", "label": "Steel", "shape": "dot", "size": 10}, {"id": "Combustion engine", "label": "Combustion engine", "shape": "dot", "size": 10}, {"id": "Solid fuel booster", "label": "Solid fuel booster", "shape": "dot", "size": 10}, {"id": "Ion drive", "label": "Ion drive", "shape": "dot", "size": 10}, {"id": "Xmas crackers", "label": "Xmas crackers", "shape": "dot", "size": 10}, {"id": "Smart phones", "label": "Smart phones", "shape": "dot", "size": 10}, {"id": "Tablets", "label": "Tablets", "shape": "dot", "size": 10}, {"id": "Luxury car interior", "label": "Luxury car interior", "shape": "dot", "size": 10}, {"id": "Car body", "label": "Car body", "shape": "dot", "size": 10}, {"id": "Wing", "label": "Wing", "shape": "dot", "size": 10}, {"id": "Propellant tank", "label": "Propellant tank", "shape": "dot", "size": 10}, {"id": "Rocket engine", "label": "Rocket engine", "shape": "dot", "size": 10}, {"id": "Jet engine", "label": "Jet engine", "shape": "dot", "size": 10}, {"id": "Windows", "label": "Windows", "shape": "dot", "size": 10}, {"id": "Laptops", "label": "Laptops", "shape": "dot", "size": 10}, {"id": "Monitors", "label": "Monitors", "shape": "dot", "size": 10}, {"id": "Televisions", "label": "Televisions", "shape": "dot", "size": 10}, {"id": "Robots", "label": "Robots", "shape": "dot", "size": 10}, {"id": "Basic interior", "label": "Basic interior", "shape": "dot", "size": 10}, {"id": "Dress", "label": "Dress", "shape": "dot", "size": 10}, {"id": "Stiletto Heel", "label": "Stiletto Heel", "shape": "dot", "size": 10}, {"id": "Sneakers", "label": "Sneakers", "shape": "dot", "size": 10}, {"id": "Quadcopter", "label": "Quadcopter", "shape": "dot", "size": 10}, {"id": "On-board computer", "label": "On-board computer", "shape": "dot", "size": 10}, {"id": "Electric motor", "label": "Electric motor", "shape": "dot", "size": 10}, {"id": "Luxury watch", "label": "Luxury watch", "shape": "dot", "size": 10}, {"id": "Tools", "label": "Tools", "shape": "dot", "size": 10}, {"id": "Economy e-car", "label": "Economy e-car", "shape": "dot", "size": 10}, {"id": "Luxury e-car", "label": "Luxury e-car", "shape": "dot", "size": 10}, {"id": "Attitude control", "label": "Attitude control", "shape": "dot", "size": 10}, {"id": "Cockpit", "label": "Cockpit", "shape": "dot", "size": 10}, {"id": "Fabric", "label": "Fabric", "shape": "dot", "size": 10}, {"id": "Underwear", "label": "Underwear", "shape": "dot", "size": 10}, {"id": "Gloves", "label": "Gloves", "shape": "dot", "size": 10}, {"id": "Truck", "label": "Truck", "shape": "dot", "size": 10}, {"id": "Bulldozer", "label": "Bulldozer", "shape": "dot", "size": 10}, {"id": "Steel beams", "label": "Steel beams", "shape": "dot", "size": 10}, {"id": "Leather", "label": "Leather", "shape": "dot", "size": 10}, {"id": "Handbags", "label": "Handbags", "shape": "dot", "size": 10}, {"id": "Economy car", "label": "Economy car", "shape": "dot", "size": 10}, {"id": "Luxury car", "label": "Luxury car", "shape": "dot", "size": 10}, {"id": "Flight computer", "label": "Flight computer", "shape": "dot", "size": 10}, {"id": "Jumbo jet", "label": "Jumbo jet", "shape": "dot", "size": 10}, {"id": "Single engine plane", "label": "Single engine plane", "shape": "dot", "size": 10}, {"id": "Golden bars", "label": "Golden bars", "shape": "dot", "size": 10}, {"id": "Necklace", "label": "Necklace", "shape": "dot", "size": 10}, {"id": "Luxury jet", "label": "Luxury jet", "shape": "dot", "size": 10}, {"id": "Sugar", "label": "Sugar", "shape": "dot", "size": 10}, {"id": "Methane", "label": "Methane", "shape": "dot", "size": 10}, {"id": "Rocket fuel", "label": "Rocket fuel", "shape": "dot", "size": 10}, {"id": "Carbon composite", "label": "Carbon composite", "shape": "dot", "size": 10}, {"id": "Fuselage", "label": "Fuselage", "shape": "dot", "size": 10}, {"id": "Sub-orbital 2nd stage", "label": "Sub-orbital 2nd stage", "shape": "dot", "size": 10}, {"id": "Orbital booster", "label": "Orbital booster", "shape": "dot", "size": 10}, {"id": "Satellite", "label": "Satellite", "shape": "dot", "size": 10}, {"id": "Starship", "label": "Starship", "shape": "dot", "size": 10}, {"id": "Sub-orbital rocket", "label": "Sub-orbital rocket", "shape": "dot", "size": 10}, {"id": "Aerospace research", "label": "Aerospace research", "shape": "dot", "size": 10}, {"id": "BFR", "label": "BFR", "shape": "dot", "size": 10}, {"id": "Cement", "label": "Cement", "shape": "dot", "size": 10}, {"id": "Limestone", "label": "Limestone", "shape": "dot", "size": 10}, {"id": "Clay", "label": "Clay", "shape": "dot", "size": 10}, {"id": "Bricks", "label": "Bricks", "shape": "dot", "size": 10}, {"id": "Planks", "label": "Planks", "shape": "dot", "size": 10}, {"id": "Butter", "label": "Butter", "shape": "dot", "size": 10}, {"id": "Cheese", "label": "Cheese", "shape": "dot", "size": 10}, {"id": "Chocolate", "label": "Chocolate", "shape": "dot", "size": 10}, {"id": "Coffee powder", "label": "Coffee powder", "shape": "dot", "size": 10}, {"id": "Cocktails", "label": "Cocktails", "shape": "dot", "size": 10}, {"id": "Vegetable oil", "label": "Vegetable oil", "shape": "dot", "size": 10}, {"id": "Salad", "label": "Salad", "shape": "dot", "size": 10}, {"id": "Samosa", "label": "Samosa", "shape": "dot", "size": 10}, {"id": "Bread", "label": "Bread", "shape": "dot", "size": 10}]);
+        edges = new vis.DataSet([{"from": "Water", "label": 1, "to": "Power", "weight": 1}, {"from": "Water", "label": 1, "to": "Seeds", "weight": 1}, {"from": "Water", "label": 1, "to": "Apples", "weight": 1}, {"from": "Water", "label": 1, "to": "Oranges", "weight": 1}, {"from": "Water", "label": 1, "to": "Grapes", "weight": 1}, {"from": "Water", "label": 1, "to": "Grain", "weight": 1}, {"from": "Water", "label": 1, "to": "Sugarcane", "weight": 1}, {"from": "Water", "label": 1, "to": "Eggs", "weight": 1}, {"from": "Water", "label": 1, "to": "Minerals", "weight": 1}, {"from": "Water", "label": 1, "to": "Bauxite", "weight": 1}, {"from": "Water", "label": 1, "to": "Gold ore", "weight": 1}, {"from": "Water", "label": 1, "to": "Cotton", "weight": 1}, {"from": "Water", "label": 1, "to": "Iron ore", "weight": 1}, {"from": "Water", "label": 1, "to": "Reinforced concrete", "weight": 1}, {"from": "Water", "label": 1, "to": "Wood", "weight": 1}, {"from": "Water", "label": 1, "to": "Cows", "weight": 1}, {"from": "Water", "label": 1, "to": "Pigs", "weight": 1}, {"from": "Water", "label": 1, "to": "Coffee beans", "weight": 1}, {"from": "Water", "label": 1, "to": "Cocoa", "weight": 1}, {"from": "Water", "label": 1, "to": "Vegetables", "weight": 1}, {"from": "Water", "label": 1, "to": "Milk", "weight": 1}, {"from": "Water", "label": 1, "to": "Ginger beer", "weight": 1}, {"from": "Water", "label": 1, "to": "Sauce", "weight": 1}, {"from": "Apples", "label": 1, "to": "Apple pie", "weight": 1}, {"from": "Apples", "label": 1, "to": "Apple cider", "weight": 1}, {"from": "Apples", "label": 1, "to": "Seeds", "weight": 1}, {"from": "Oranges", "label": 1, "to": "Orange juice", "weight": 1}, {"from": "Oranges", "label": 1, "to": "Seeds", "weight": 1}, {"from": "Grain", "label": 1, "to": "Eggs", "weight": 1}, {"from": "Grain", "label": 1, "to": "Flour", "weight": 1}, {"from": "Grain", "label": 1, "to": "Fodder", "weight": 1}, {"from": "Grain", "label": 1, "to": "Seeds", "weight": 1}, {"from": "Steak", "label": 1, "to": "Hamburger", "weight": 1}, {"from": "Steak", "label": 1, "to": "Lasagna", "weight": 1}, {"from": "Steak", "label": 1, "to": "Cows", "weight": 1}, {"from": "Sausages", "label": 1, "to": "Frozen pizza", "weight": 1}, {"from": "Sausages", "label": 1, "to": "Meat balls", "weight": 1}, {"from": "Sausages", "label": 1, "to": "Pigs", "weight": 1}, {"from": "Eggs", "label": 1, "to": "Dough", "weight": 1}, {"from": "Eggs", "label": 1, "to": "Pasta", "weight": 1}, {"from": "Crude oil", "label": 1, "to": "Power", "weight": 1}, {"from": "Crude oil", "label": 1, "to": "Petrol", "weight": 1}, {"from": "Crude oil", "label": 1, "to": "Diesel", "weight": 1}, {"from": "Crude oil", "label": 1, "to": "Plastic", "weight": 1}, {"from": "Crude oil", "label": 1, "to": "Carbon fibers", "weight": 1}, {"from": "Diesel", "label": 1, "to": "Power", "weight": 1}, {"from": "Diesel", "label": 1, "to": "Transport", "weight": 1}, {"from": "Diesel", "label": 1, "to": "Construction units", "weight": 1}, {"from": "Diesel", "label": 1, "to": "Ethanol", "weight": 1}, {"from": "Minerals", "label": 1, "to": "Power", "weight": 1}, {"from": "Minerals", "label": 1, "to": "Chemicals", "weight": 1}, {"from": "Bauxite", "label": 1, "to": "Power", "weight": 1}, {"from": "Bauxite", "label": 1, "to": "Aluminium", "weight": 1}, {"from": "Silicon", "label": 1, "to": "Power", "weight": 1}, {"from": "Silicon", "label": 1, "to": "Processors", "weight": 1}, {"from": "Silicon", "label": 1, "to": "Electronic components", "weight": 1}, {"from": "Silicon", "label": 1, "to": "Displays", "weight": 1}, {"from": "Silicon", "label": 1, "to": "Glass", "weight": 1}, {"from": "Silicon", "label": 1, "to": "High grade e-comps", "weight": 1}, {"from": "Silicon", "label": 1, "to": "Heat shield", "weight": 1}, {"from": "Silicon", "label": 1, "to": "Sand", "weight": 1}, {"from": "Chemicals", "label": 1, "to": "Power", "weight": 1}, {"from": "Chemicals", "label": 1, "to": "Processors", "weight": 1}, {"from": "Chemicals", "label": 1, "to": "Electronic components", "weight": 1}, {"from": "Chemicals", "label": 1, "to": "Batteries", "weight": 1}, {"from": "Chemicals", "label": 1, "to": "Displays", "weight": 1}, {"from": "Chemicals", "label": 1, "to": "Steel", "weight": 1}, {"from": "Chemicals", "label": 1, "to": "Combustion engine", "weight": 1}, {"from": "Chemicals", "label": 1, "to": "High grade e-comps", "weight": 1}, {"from": "Chemicals", "label": 1, "to": "Solid fuel booster", "weight": 1}, {"from": "Chemicals", "label": 1, "to": "Ion drive", "weight": 1}, {"from": "Chemicals", "label": 1, "to": "Xmas crackers", "weight": 1}, {"from": "Aluminium", "label": 1, "to": "Power", "weight": 1}, {"from": "Aluminium", "label": 1, "to": "Smart phones", "weight": 1}, {"from": "Aluminium", "label": 1, "to": "Tablets", "weight": 1}, {"from": "Aluminium", "label": 1, "to": "Luxury car interior", "weight": 1}, {"from": "Aluminium", "label": 1, "to": "Car body", "weight": 1}, {"from": "Aluminium", "label": 1, "to": "Wing", "weight": 1}, {"from": "Aluminium", "label": 1, "to": "Propellant tank", "weight": 1}, {"from": "Aluminium", "label": 1, "to": "Solid fuel booster", "weight": 1}, {"from": "Aluminium", "label": 1, "to": "Rocket engine", "weight": 1}, {"from": "Aluminium", "label": 1, "to": "Jet engine", "weight": 1}, {"from": "Aluminium", "label": 1, "to": "Windows", "weight": 1}, {"from": "Plastic", "label": 1, "to": "Power", "weight": 1}, {"from": "Plastic", "label": 1, "to": "Laptops", "weight": 1}, {"from": "Plastic", "label": 1, "to": "Monitors", "weight": 1}, {"from": "Plastic", "label": 1, "to": "Televisions", "weight": 1}, {"from": "Plastic", "label": 1, "to": "Robots", "weight": 1}, {"from": "Plastic", "label": 1, "to": "Basic interior", "weight": 1}, {"from": "Plastic", "label": 1, "to": "Dress", "weight": 1}, {"from": "Plastic", "label": 1, "to": "Stiletto Heel", "weight": 1}, {"from": "Plastic", "label": 1, "to": "Sneakers", "weight": 1}, {"from": "Plastic", "label": 1, "to": "Quadcopter", "weight": 1}, {"from": "Plastic", "label": 1, "to": "Xmas crackers", "weight": 1}, {"from": "Processors", "label": 1, "to": "Smart phones", "weight": 1}, {"from": "Processors", "label": 1, "to": "Tablets", "weight": 1}, {"from": "Processors", "label": 1, "to": "Laptops", "weight": 1}, {"from": "Processors", "label": 1, "to": "Televisions", "weight": 1}, {"from": "Processors", "label": 1, "to": "Robots", "weight": 1}, {"from": "Processors", "label": 1, "to": "On-board computer", "weight": 1}, {"from": "Electronic components", "label": 1, "to": "Smart phones", "weight": 1}, {"from": "Electronic components", "label": 1, "to": "Tablets", "weight": 1}, {"from": "Electronic components", "label": 1, "to": "Laptops", "weight": 1}, {"from": "Electronic components", "label": 1, "to": "Monitors", "weight": 1}, {"from": "Electronic components", "label": 1, "to": "Televisions", "weight": 1}, {"from": "Electronic components", "label": 1, "to": "On-board computer", "weight": 1}, {"from": "Electronic components", "label": 1, "to": "Electric motor", "weight": 1}, {"from": "Electronic components", "label": 1, "to": "Combustion engine", "weight": 1}, {"from": "Electronic components", "label": 1, "to": "Luxury watch", "weight": 1}, {"from": "Electronic components", "label": 1, "to": "Quadcopter", "weight": 1}, {"from": "Electronic components", "label": 1, "to": "Tools", "weight": 1}, {"from": "Batteries", "label": 1, "to": "Smart phones", "weight": 1}, {"from": "Batteries", "label": 1, "to": "Tablets", "weight": 1}, {"from": "Batteries", "label": 1, "to": "Laptops", "weight": 1}, {"from": "Batteries", "label": 1, "to": "Economy e-car", "weight": 1}, {"from": "Batteries", "label": 1, "to": "Luxury e-car", "weight": 1}, {"from": "Batteries", "label": 1, "to": "Attitude control", "weight": 1}, {"from": "Batteries", "label": 1, "to": "Ion drive", "weight": 1}, {"from": "Batteries", "label": 1, "to": "Quadcopter", "weight": 1}, {"from": "Batteries", "label": 1, "to": "Tools", "weight": 1}, {"from": "Displays", "label": 1, "to": "Smart phones", "weight": 1}, {"from": "Displays", "label": 1, "to": "Tablets", "weight": 1}, {"from": "Displays", "label": 1, "to": "Laptops", "weight": 1}, {"from": "Displays", "label": 1, "to": "Monitors", "weight": 1}, {"from": "Displays", "label": 1, "to": "Televisions", "weight": 1}, {"from": "Displays", "label": 1, "to": "Luxury car interior", "weight": 1}, {"from": "Displays", "label": 1, "to": "Basic interior", "weight": 1}, {"from": "Displays", "label": 1, "to": "Cockpit", "weight": 1}, {"from": "Cotton", "label": 1, "to": "Fabric", "weight": 1}, {"from": "Cotton", "label": 1, "to": "Seeds", "weight": 1}, {"from": "Fabric", "label": 1, "to": "Power", "weight": 1}, {"from": "Fabric", "label": 1, "to": "Basic interior", "weight": 1}, {"from": "Fabric", "label": 1, "to": "Underwear", "weight": 1}, {"from": "Fabric", "label": 1, "to": "Gloves", "weight": 1}, {"from": "Fabric", "label": 1, "to": "Dress", "weight": 1}, {"from": "Iron ore", "label": 1, "to": "Power", "weight": 1}, {"from": "Iron ore", "label": 1, "to": "Steel", "weight": 1}, {"from": "Steel", "label": 1, "to": "Power", "weight": 1}, {"from": "Steel", "label": 1, "to": "Electric motor", "weight": 1}, {"from": "Steel", "label": 1, "to": "Car body", "weight": 1}, {"from": "Steel", "label": 1, "to": "Combustion engine", "weight": 1}, {"from": "Steel", "label": 1, "to": "Truck", "weight": 1}, {"from": "Steel", "label": 1, "to": "Bulldozer", "weight": 1}, {"from": "Steel", "label": 1, "to": "Attitude control", "weight": 1}, {"from": "Steel", "label": 1, "to": "Rocket engine", "weight": 1}, {"from": "Steel", "label": 1, "to": "Heat shield", "weight": 1}, {"from": "Steel", "label": 1, "to": "Reinforced concrete", "weight": 1}, {"from": "Steel", "label": 1, "to": "Steel beams", "weight": 1}, {"from": "Steel", "label": 1, "to": "Tools", "weight": 1}, {"from": "Sand", "label": 1, "to": "Power", "weight": 1}, {"from": "Sand", "label": 1, "to": "Reinforced concrete", "weight": 1}, {"from": "Glass", "label": 1, "to": "Power", "weight": 1}, {"from": "Glass", "label": 1, "to": "Car body", "weight": 1}, {"from": "Glass", "label": 1, "to": "Luxury watch", "weight": 1}, {"from": "Glass", "label": 1, "to": "Windows", "weight": 1}, {"from": "Leather", "label": 1, "to": "Luxury car interior", "weight": 1}, {"from": "Leather", "label": 1, "to": "Gloves", "weight": 1}, {"from": "Leather", "label": 1, "to": "Stiletto Heel", "weight": 1}, {"from": "Leather", "label": 1, "to": "Handbags", "weight": 1}, {"from": "Leather", "label": 1, "to": "Cows", "weight": 1}, {"from": "On-board computer", "label": 1, "to": "Economy e-car", "weight": 1}, {"from": "On-board computer", "label": 1, "to": "Luxury e-car", "weight": 1}, {"from": "On-board computer", "label": 1, "to": "Economy car", "weight": 1}, {"from": "On-board computer", "label": 1, "to": "Luxury car", "weight": 1}, {"from": "On-board computer", "label": 1, "to": "Truck", "weight": 1}, {"from": "On-board computer", "label": 1, "to": "Flight computer", "weight": 1}, {"from": "On-board computer", "label": 1, "to": "Quadcopter", "weight": 1}, {"from": "Electric motor", "label": 1, "to": "Robots", "weight": 1}, {"from": "Electric motor", "label": 1, "to": "Economy e-car", "weight": 1}, {"from": "Electric motor", "label": 1, "to": "Luxury e-car", "weight": 1}, {"from": "Electric motor", "label": 1, "to": "Attitude control", "weight": 1}, {"from": "Luxury car interior", "label": 1, "to": "Luxury e-car", "weight": 1}, {"from": "Luxury car interior", "label": 1, "to": "Luxury car", "weight": 1}, {"from": "Basic interior", "label": 1, "to": "Economy e-car", "weight": 1}, {"from": "Basic interior", "label": 1, "to": "Economy car", "weight": 1}, {"from": "Basic interior", "label": 1, "to": "Truck", "weight": 1}, {"from": "Basic interior", "label": 1, "to": "Cockpit", "weight": 1}, {"from": "Basic interior", "label": 1, "to": "Jumbo jet", "weight": 1}, {"from": "Car body", "label": 1, "to": "Economy e-car", "weight": 1}, {"from": "Car body", "label": 1, "to": "Luxury e-car", "weight": 1}, {"from": "Car body", "label": 1, "to": "Economy car", "weight": 1}, {"from": "Car body", "label": 1, "to": "Luxury car", "weight": 1}, {"from": "Car body", "label": 1, "to": "Truck", "weight": 1}, {"from": "Car body", "label": 1, "to": "Bulldozer", "weight": 1}, {"from": "Combustion engine", "label": 1, "to": "Economy car", "weight": 1}, {"from": "Combustion engine", "label": 1, "to": "Luxury car", "weight": 1}, {"from": "Combustion engine", "label": 1, "to": "Truck", "weight": 1}, {"from": "Combustion engine", "label": 1, "to": "Bulldozer", "weight": 1}, {"from": "Combustion engine", "label": 1, "to": "Single engine plane", "weight": 1}, {"from": "Seeds", "label": 1, "to": "Grapes", "weight": 1}, {"from": "Seeds", "label": 1, "to": "Sugarcane", "weight": 1}, {"from": "Seeds", "label": 1, "to": "Wood", "weight": 1}, {"from": "Seeds", "label": 1, "to": "Coffee beans", "weight": 1}, {"from": "Seeds", "label": 1, "to": "Cocoa", "weight": 1}, {"from": "Seeds", "label": 1, "to": "Vegetables", "weight": 1}, {"from": "Gold ore", "label": 1, "to": "Power", "weight": 1}, {"from": "Gold ore", "label": 1, "to": "Golden bars", "weight": 1}, {"from": "Golden bars", "label": 1, "to": "Power", "weight": 1}, {"from": "Golden bars", "label": 1, "to": "Luxury watch", "weight": 1}, {"from": "Golden bars", "label": 1, "to": "Necklace", "weight": 1}, {"from": "Golden bars", "label": 1, "to": "High grade e-comps", "weight": 1}, {"from": "Golden bars", "label": 1, "to": "Luxury jet", "weight": 1}, {"from": "Sugarcane", "label": 1, "to": "Ethanol", "weight": 1}, {"from": "Sugarcane", "label": 1, "to": "Sugar", "weight": 1}, {"from": "Ethanol", "label": 1, "to": "Power", "weight": 1}, {"from": "Ethanol", "label": 1, "to": "Petrol", "weight": 1}, {"from": "Methane", "label": 1, "to": "Power", "weight": 1}, {"from": "Methane", "label": 1, "to": "Rocket fuel", "weight": 1}, {"from": "Carbon fibers", "label": 1, "to": "Power", "weight": 1}, {"from": "Carbon fibers", "label": 1, "to": "Carbon composite", "weight": 1}, {"from": "Carbon composite", "label": 1, "to": "Fuselage", "weight": 1}, {"from": "Carbon composite", "label": 1, "to": "Wing", "weight": 1}, {"from": "Fuselage", "label": 1, "to": "Sub-orbital 2nd stage", "weight": 1}, {"from": "Fuselage", "label": 1, "to": "Orbital booster", "weight": 1}, {"from": "Fuselage", "label": 1, "to": "Jumbo jet", "weight": 1}, {"from": "Fuselage", "label": 1, "to": "Luxury jet", "weight": 1}, {"from": "Fuselage", "label": 1, "to": "Single engine plane", "weight": 1}, {"from": "Wing", "label": 1, "to": "Jumbo jet", "weight": 1}, {"from": "Wing", "label": 1, "to": "Luxury jet", "weight": 1}, {"from": "Wing", "label": 1, "to": "Single engine plane", "weight": 1}, {"from": "High grade e-comps", "label": 1, "to": "Flight computer", "weight": 1}, {"from": "High grade e-comps", "label": 1, "to": "Cockpit", "weight": 1}, {"from": "High grade e-comps", "label": 1, "to": "Rocket engine", "weight": 1}, {"from": "High grade e-comps", "label": 1, "to": "Ion drive", "weight": 1}, {"from": "High grade e-comps", "label": 1, "to": "Jet engine", "weight": 1}, {"from": "High grade e-comps", "label": 1, "to": "Satellite", "weight": 1}, {"from": "Flight computer", "label": 1, "to": "Sub-orbital 2nd stage", "weight": 1}, {"from": "Flight computer", "label": 1, "to": "Satellite", "weight": 1}, {"from": "Cockpit", "label": 1, "to": "Starship", "weight": 1}, {"from": "Cockpit", "label": 1, "to": "Jumbo jet", "weight": 1}, {"from": "Cockpit", "label": 1, "to": "Luxury jet", "weight": 1}, {"from": "Cockpit", "label": 1, "to": "Single engine plane", "weight": 1}, {"from": "Attitude control", "label": 1, "to": "Sub-orbital 2nd stage", "weight": 1}, {"from": "Attitude control", "label": 1, "to": "Starship", "weight": 1}, {"from": "Attitude control", "label": 1, "to": "Satellite", "weight": 1}, {"from": "Rocket fuel", "label": 1, "to": "Power", "weight": 1}, {"from": "Rocket fuel", "label": 1, "to": "Propellant tank", "weight": 1}, {"from": "Rocket fuel", "label": 1, "to": "Solid fuel booster", "weight": 1}, {"from": "Propellant tank", "label": 1, "to": "Sub-orbital 2nd stage", "weight": 1}, {"from": "Propellant tank", "label": 1, "to": "Orbital booster", "weight": 1}, {"from": "Propellant tank", "label": 1, "to": "Starship", "weight": 1}, {"from": "Solid fuel booster", "label": 1, "to": "Sub-orbital rocket", "weight": 1}, {"from": "Rocket engine", "label": 1, "to": "Orbital booster", "weight": 1}, {"from": "Rocket engine", "label": 1, "to": "Starship", "weight": 1}, {"from": "Heat shield", "label": 1, "to": "Starship", "weight": 1}, {"from": "Ion drive", "label": 1, "to": "Sub-orbital 2nd stage", "weight": 1}, {"from": "Ion drive", "label": 1, "to": "Satellite", "weight": 1}, {"from": "Jet engine", "label": 1, "to": "Jumbo jet", "weight": 1}, {"from": "Jet engine", "label": 1, "to": "Luxury jet", "weight": 1}, {"from": "Sub-orbital 2nd stage", "label": 1, "to": "Sub-orbital rocket", "weight": 1}, {"from": "Sub-orbital rocket", "label": 1, "to": "Aerospace research", "weight": 1}, {"from": "Orbital booster", "label": 1, "to": "BFR", "weight": 1}, {"from": "Starship", "label": 1, "to": "BFR", "weight": 1}, {"from": "BFR", "label": 1, "to": "Aerospace research", "weight": 1}, {"from": "Cement", "label": 1, "to": "Reinforced concrete", "weight": 1}, {"from": "Cement", "label": 1, "to": "Limestone", "weight": 1}, {"from": "Clay", "label": 1, "to": "Power", "weight": 1}, {"from": "Clay", "label": 1, "to": "Bricks", "weight": 1}, {"from": "Limestone", "label": 1, "to": "Power", "weight": 1}, {"from": "Wood", "label": 1, "to": "Planks", "weight": 1}, {"from": "Steel beams", "label": 1, "to": "Power", "weight": 1}, {"from": "Steel beams", "label": 1, "to": "Construction units", "weight": 1}, {"from": "Planks", "label": 1, "to": "Tools", "weight": 1}, {"from": "Windows", "label": 1, "to": "Construction units", "weight": 1}, {"from": "Tools", "label": 1, "to": "Construction units", "weight": 1}, {"from": "Bulldozer", "label": 1, "to": "Construction units", "weight": 1}, {"from": "Cows", "label": 1, "to": "Fodder", "weight": 1}, {"from": "Pigs", "label": 1, "to": "Fodder", "weight": 1}, {"from": "Milk", "label": 1, "to": "Butter", "weight": 1}, {"from": "Milk", "label": 1, "to": "Cheese", "weight": 1}, {"from": "Milk", "label": 1, "to": "Chocolate", "weight": 1}, {"from": "Milk", "label": 1, "to": "Fodder", "weight": 1}, {"from": "Coffee beans", "label": 1, "to": "Coffee powder", "weight": 1}, {"from": "Coffee powder", "label": 1, "to": "Cocktails", "weight": 1}, {"from": "Vegetables", "label": 1, "to": "Fodder", "weight": 1}, {"from": "Vegetables", "label": 1, "to": "Ginger beer", "weight": 1}, {"from": "Vegetables", "label": 1, "to": "Vegetable oil", "weight": 1}, {"from": "Vegetables", "label": 1, "to": "Frozen pizza", "weight": 1}, {"from": "Vegetables", "label": 1, "to": "Sauce", "weight": 1}, {"from": "Vegetables", "label": 1, "to": "Hamburger", "weight": 1}, {"from": "Vegetables", "label": 1, "to": "Salad", "weight": 1}, {"from": "Vegetables", "label": 1, "to": "Samosa", "weight": 1}, {"from": "Bread", "label": 1, "to": "Hamburger", "weight": 1}, {"from": "Bread", "label": 1, "to": "Meat balls", "weight": 1}, {"from": "Bread", "label": 1, "to": "Dough", "weight": 1}, {"from": "Cheese", "label": 1, "to": "Frozen pizza", "weight": 1}, {"from": "Cheese", "label": 1, "to": "Lasagna", "weight": 1}, {"from": "Cheese", "label": 1, "to": "Salad", "weight": 1}, {"from": "Orange juice", "label": 1, "to": "Cocktails", "weight": 1}, {"from": "Orange juice", "label": 1, "to": "Sugar", "weight": 1}, {"from": "Apple cider", "label": 1, "to": "Cocktails", "weight": 1}, {"from": "Ginger beer", "label": 1, "to": "Cocktails", "weight": 1}, {"from": "Ginger beer", "label": 1, "to": "Sugar", "weight": 1}, {"from": "Pasta", "label": 1, "to": "Lasagna", "weight": 1}, {"from": "Pasta", "label": 1, "to": "Flour", "weight": 1}, {"from": "Flour", "label": 1, "to": "Dough", "weight": 1}, {"from": "Flour", "label": 1, "to": "Samosa", "weight": 1}, {"from": "Butter", "label": 1, "to": "Dough", "weight": 1}, {"from": "Butter", "label": 1, "to": "Sauce", "weight": 1}, {"from": "Butter", "label": 1, "to": "Hamburger", "weight": 1}, {"from": "Sugar", "label": 1, "to": "Power", "weight": 1}, {"from": "Sugar", "label": 1, "to": "Apple pie", "weight": 1}, {"from": "Sugar", "label": 1, "to": "Chocolate", "weight": 1}, {"from": "Cocoa", "label": 1, "to": "Chocolate", "weight": 1}, {"from": "Dough", "label": 1, "to": "Apple pie", "weight": 1}, {"from": "Dough", "label": 1, "to": "Frozen pizza", "weight": 1}, {"from": "Sauce", "label": 1, "to": "Lasagna", "weight": 1}, {"from": "Sauce", "label": 1, "to": "Meat balls", "weight": 1}, {"from": "Vegetable oil", "label": 1, "to": "Power", "weight": 1}, {"from": "Vegetable oil", "label": 1, "to": "Hamburger", "weight": 1}, {"from": "Vegetable oil", "label": 1, "to": "Meat balls", "weight": 1}, {"from": "Vegetable oil", "label": 1, "to": "Salad", "weight": 1}, {"from": "Vegetable oil", "label": 1, "to": "Samosa", "weight": 1}, {"from": "Power", "label": 1, "to": "Petrol", "weight": 1}, {"from": "Power", "label": 1, "to": "Transport", "weight": 1}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+        network.on("stabilizationProgress", function(params) {
+      		document.getElementById('loadingBar').removeAttribute("style");
+	        var maxWidth = 496;
+	        var minWidth = 20;
+	        var widthFactor = params.iterations/params.total;
+	        var width = Math.max(minWidth,maxWidth * widthFactor);
+
+	        document.getElementById('bar').style.width = width + 'px';
+	        document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+	    });
+	    network.once("stabilizationIterationsDone", function() {
+	        document.getElementById('text').innerHTML = '100%';
+	        document.getElementById('bar').style.width = '496px';
+	        document.getElementById('loadingBar').style.opacity = 0;
+	        // really clean the dom element
+	        setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+	    });
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

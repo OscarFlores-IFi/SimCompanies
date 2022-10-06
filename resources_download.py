@@ -10,17 +10,34 @@ def general_data(full_list):
     neededFor = [i["name"] for i in full_list["neededFor"]]
     producedAnHour = full_list["producedAnHour"]
     baseSalary = full_list["baseSalary"]
-
-    return {"producedFrom": producedFrom,
+    marketSaturation = full_list["marketSaturation"]
+    retailModeling = full_list["retailModeling"]
+    return {
+            "producedFrom": producedFrom,
             "neededFor": neededFor,
             "producedAnHour": producedAnHour,
-            "baseSalary": baseSalary}
+            "baseSalary": baseSalary,
+            "marketSaturation": marketSaturation,
+            "retailModeling": retailModeling}
 
 def read_json(filename):
     with open(filename, 'r') as f:
         full_list = json.load(f)
     return full_list
 
+def big_json(economy):
+    # Economy = (0, 1, or 2); Recession, Normal or Boom
+    big_dic = {}
+    for i in range(146):
+        filename = 'resources/prod_list/prod_list{}_{}.json'.format(economy,i)
+        try:
+            full_list = read_json(filename)
+            big_dic[full_list["name"]] = general_data(full_list)
+        except:
+            pass
+
+    with open('recession.json', 'w') as f:
+        json.dump(big_dic, f)
 
 ############################# Download data ##############################
 
@@ -44,40 +61,6 @@ def read_json(filename):
 
 ################ Wrap important information into big json ################
 
-# Big_dic = {}
-# for i in range(146):
-#     economy = 0
-#     filename = 'prod_list{}_{}.json'.format(economy,i)
-#     try:
-#         full_list = read_json(filename)
-#         Big_dic[full_list["name"]] = general_data(full_list)
-#     except:
-#         pass
-# with open('recession.json', 'w') as f:
-#     json.dump(Big_dic, f)
 
 
-# Big_dic = {}
-# for i in range(146):
-#     economy = 1
-#     filename = 'prod_list{}_{}.json'.format(economy,i)
-#     try:
-#         full_list = read_json(filename)
-#         Big_dic[full_list["name"]] = general_data(full_list)
-#     except:
-#         pass
-# with open('normal.json', 'w') as f:
-#     json.dump(Big_dic, f)
-
-
-# Big_dic = {}
-# for i in range(146):
-#     economy = 2
-#     filename = 'prod_list{}_{}.json'.format(economy,i)
-#     try:
-#         full_list = read_json(filename)
-#         Big_dic[full_list["name"]] = general_data(full_list)
-#     except:
-#         pass
-# with open('boom.json', 'w') as f:
-#     json.dump(Big_dic, f)
+big_json(1)
