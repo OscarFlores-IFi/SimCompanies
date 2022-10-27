@@ -35,8 +35,8 @@ def big_json(economy):
             big_dic[full_list["name"]] = general_data(full_list)
         except:
             pass
-
-    with open('recession.json', 'w') as f:
+            
+    with open('/resources/recession.json', 'w') as f:
         json.dump(big_dic, f)
 
 ############################# Download data ##############################
